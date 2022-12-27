@@ -6,6 +6,9 @@ import com.workforce.bod.assignment.TaskGroup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskGroupTest {
@@ -66,7 +69,9 @@ public class TaskGroupTest {
         task.addRequiredSkill(Skill.CONSTRUCTION);
         taskGroup.addTask(task);
 
-        taskGroup.recalculateSkills();
+        Map<Skill, Integer> recalculatedSkills = taskGroup.generateNewRecalculationMap(Set.of(task));
+        taskGroup.setSkills(recalculatedSkills);
+
         assertEquals(3, taskGroup.getSkills().get(Skill.CONSTRUCTION));
     }
 
@@ -77,7 +82,8 @@ public class TaskGroupTest {
         task.addRequiredSkill(Skill.DEMOLITION, 2);
         taskGroup.addTask(task);
 
-        taskGroup.recalculateSkills();
+        Map<Skill, Integer> recalculatedSkills = taskGroup.generateNewRecalculationMap(Set.of(task));
+        taskGroup.setSkills(recalculatedSkills);
 
         assertTrue(taskGroup.getTasks().size() > 0);
         assertTrue(taskGroup.getSkills().size() > 0);
@@ -108,15 +114,33 @@ public class TaskGroupTest {
     }
 
     @Test
-    void givenTaskGroupWithThreeConstructionSkill_whenVerifySkills_theTrue() {
+    void givenTaskGroupWithThreeConstructionSkill_whenVerifySkills_thenTrue() {
         Task task = new Task();
         task.addRequiredSkill(Skill.CONSTRUCTION);
         task.addRequiredSkill(Skill.CONSTRUCTION);
         task.addRequiredSkill(Skill.DEMOLITION);
         taskGroup.addTask(task);
 
-        boolean isVerified = taskGroup.verifySkills(taskGroup);
+        Map<Skill, Integer> recalculatedSkills = taskGroup.generateNewRecalculationMap(Set.of(task));
+
+        boolean isVerified = taskGroup.verifySkills(recalculatedSkills);
 
         assertTrue(isVerified);
+    }
+
+    @Test
+    void givenTaskGroupWithThreeConstructionSkill_whenVerifySkills_thenFalse() {
+        Task task = new Task();
+        task.addRequiredSkill(Skill.CONSTRUCTION);
+        task.addRequiredSkill(Skill.CONSTRUCTION);
+        task.addRequiredSkill(Skill.DEMOLITION);
+        taskGroup.addTask(task);
+        task.addRequiredSkill(Skill.DEMOLITION);
+
+        Map<Skill, Integer> recalculatedSkills = taskGroup.generateNewRecalculationMap(Set.of(task));
+
+        boolean isVerified = taskGroup.verifySkills(recalculatedSkills);
+
+        assertFalse(isVerified);
     }
 }

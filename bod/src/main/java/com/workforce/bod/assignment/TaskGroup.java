@@ -27,16 +27,11 @@ public class TaskGroup {
         return skills;
     }
 
-    public void recalculateSkills() {
-//        skills.clear();
-//        for(Task task : tasks) {
-//            addSkillsFrom(task);
-//        }
-        Map<Skill, Integer> map = generateNewRecalculationMap(tasks);
-        skills = map;
+    public void setSkills(Map<Skill, Integer> skills) {
+        this.skills = skills;
     }
 
-    Map<Skill, Integer> generateNewRecalculationMap(Set<Task> tasks) {
+    public Map<Skill, Integer> generateNewRecalculationMap(Set<Task> tasks) {
         Map<Skill, Integer> map = new HashMap<>();
         for (Task task : tasks) {
             addSkillsToMap(map, task);
@@ -72,8 +67,7 @@ public class TaskGroup {
         }
     }
 
-    public boolean verifySkills(TaskGroup taskGroup) {
-        Map<Skill, Integer> map = generateNewRecalculationMap(tasks);
-        return map.equals(taskGroup.getSkills());
+    public boolean verifySkills(Map<Skill, Integer> skills2) {
+        return skills.equals(skills2);
     }
 }
