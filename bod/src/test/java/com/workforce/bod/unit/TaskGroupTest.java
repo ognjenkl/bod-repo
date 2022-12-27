@@ -49,7 +49,6 @@ public class TaskGroupTest {
 
     @Test
     void givenTaskWithRequiredTwoSkillsQuantityOneAndTwo_whenAddTask_thenRequiredSkillsNumberGreaterThanZero() {
-        ;
         Task task = new Task();
         task.addRequiredSkill(Skill.CONSTRUCTION, 1);
         task.addRequiredSkill(Skill.DEMOLITION, 2);

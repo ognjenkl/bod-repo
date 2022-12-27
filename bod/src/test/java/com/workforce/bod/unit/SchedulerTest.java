@@ -1,10 +1,12 @@
 package com.workforce.bod.unit;
 
+import com.workforce.bod.ResourceGroup;
 import com.workforce.bod.assignment.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -158,6 +160,36 @@ public class SchedulerTest {
         boolean hasRequiredSills = scheduler.resourceHasRequiredSillsNumber(tasks, resources);
 
         assertFalse(hasRequiredSills);
+    }
+
+    @Test
+    void givenTaskAndResource_whenGetEligibleResourcesByMatchingSkillsNumber_thenNotNull() {
+        Map<Task, Map<Skill, Resource>> eligibleTaskResources =
+                scheduler.getEligibleTaskResources(null, null);
+
+        assertNotNull(eligibleTaskResources);
+    }
+
+    @Test
+    void givenTaskAndResource_whenGetEligibleResourcesByMatchingSkillsNumber_thenReturnNotNull() {
+        Resource resource1 = new Resource();
+        resource1.addSkill(Skill.CONSTRUCTION);
+        Resource resource2= new Resource();
+        resource2.addSkill(Skill.DEMOLITION);
+        ResourceGroup resourceGroup = new ResourceGroup();
+        resourceGroup.addResource(resource1);
+        resourceGroup.addResource(resource2);
+
+        Task task = new Task();
+        task.addRequiredSkill(Skill.CONSTRUCTION);
+        task.addRequiredSkill(Skill.DEMOLITION);
+        TaskGroup taskGroup = new TaskGroup();
+        taskGroup.addTask(task);
+
+        Map<Task, Map<Skill, Resource>> eligibleTaskResources =
+                scheduler.getEligibleTaskResources(taskGroup, resourceGroup);
+
+        assertNotNull(eligibleTaskResources);
     }
 
     // TODO 2022-12-25 test resource with skills number for required tasks
