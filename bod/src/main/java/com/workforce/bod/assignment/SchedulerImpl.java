@@ -41,28 +41,33 @@ public class SchedulerImpl implements Scheduler {
 
     // TODO: 12/27/2022 optimize
     @Override
-    public Map<Task, Map<Skill, Resource>> getEligibleTaskResources(TaskGroup tasks, ResourceGroup resourceGroup) {
-        Map<Task, Map<Skill, Resource>> eligibleTaskResources = new HashMap<>();
+    public Map<Task, Map<Skill, Set<Resource>>> getEligibleTaskResources(TaskGroup tasks, ResourceGroup resourceGroup) {
+        Map<Task, Map<Skill, Set<Resource>>> eligibleTaskResources = new HashMap<>();
         if (tasks == null || resourceGroup == null) {
             return eligibleTaskResources;
         }
 
         for (Task task : tasks.getTasks()) {
-            Map<Skill, Resource> eligibleResources = getEligibleResources(task, resourceGroup);
+            Map<Skill, Set<Resource>> eligibleResources = getEligibleResources(task, resourceGroup);
             if (!eligibleResources.isEmpty()) {
+                // TODO: 12/27/2022 make testable
                 eligibleTaskResources.put(task, eligibleResources);
+                // TODO: 12/27/2022 test if task has enough eligible resources
+                task.setEligibleResources(eligibleResources);
             }
         }
         return eligibleTaskResources;
     }
 
-    private Map<Skill, Resource> getEligibleResources(Task task, ResourceGroup resourceGroup) {
-        Map<Skill, Resource> eligibleResources = new HashMap<>();
+    private Map<Skill, Set<Resource>> getEligibleResources(Task task, ResourceGroup resourceGroup) {
+        Map<Skill, Set<Resource>> eligibleResources = new HashMap<>();
+        Set<Resource> resources = new HashSet<>();
         for (Resource resource : resourceGroup.getResources()) {
             for (Skill skill : resource.getSkills()) {
                 if (task.getRequiredSkills().keySet().contains(skill)) {
-                    eligibleResources.put(skill, resource);
+                    resources.add(resource);
                 }
+                eligibleResources.put(skill, resources);
             }
         }
         return eligibleResources;

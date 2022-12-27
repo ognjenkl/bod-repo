@@ -4,11 +4,13 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Getter
 public class Task {
 
     private final Map<Skill, Integer> requiredSkills = new HashMap<>();
+    private Map<Skill, Set<Resource>> eligibleResources;
 
     public Integer addRequiredSkill(Skill skill, Integer numberOfSkills) {
 
@@ -27,5 +29,9 @@ public class Task {
     public Integer getRequiredSkillsNumber(Skill skill) {
         Integer numOfSkills = requiredSkills.get(skill);
         return numOfSkills != null ? numOfSkills : 0;
+    }
+
+    public void setEligibleResources(Map<Skill, Set<Resource>> eligibleResources) {
+        this.eligibleResources = eligibleResources;
     }
 }

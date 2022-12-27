@@ -164,7 +164,7 @@ public class SchedulerTest {
 
     @Test
     void givenTaskAndResource_whenGetEligibleResourcesByMatchingSkillsNumber_thenNotNull() {
-        Map<Task, Map<Skill, Resource>> eligibleTaskResources =
+        Map<Task, Map<Skill, Set<Resource>>> eligibleTaskResources =
                 scheduler.getEligibleTaskResources(null, null);
 
         assertNotNull(eligibleTaskResources);
@@ -186,7 +186,7 @@ public class SchedulerTest {
         TaskGroup taskGroup = new TaskGroup();
         taskGroup.addTask(task);
 
-        Map<Task, Map<Skill, Resource>> eligibleTaskResources =
+        Map<Task, Map<Skill, Set<Resource>>> eligibleTaskResources =
                 scheduler.getEligibleTaskResources(taskGroup, resourceGroup);
 
         assertNotNull(eligibleTaskResources);
