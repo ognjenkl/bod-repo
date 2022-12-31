@@ -1,11 +1,17 @@
 package com.workforce.bod.unit;
 
+import com.workforce.bod.ResourceGroup;
+import com.workforce.bod.assignment.Resource;
 import com.workforce.bod.assignment.Skill;
 import com.workforce.bod.assignment.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskTest {
 
@@ -66,4 +72,51 @@ public class TaskTest {
         assertEquals(0, numberOfSkills);
     }
 
+    @Test
+    void givenTaskAndResources_whenHasEnoughEligibleResources_thenTrue() {
+        Resource resource1 = new Resource();
+        resource1.addSkill(Skill.CONSTRUCTION);
+        Resource resource2= new Resource();
+        resource2.addSkill(Skill.DEMOLITION);
+        ResourceGroup resourceGroup = new ResourceGroup();
+        resourceGroup.addResource(resource1);
+        resourceGroup.addResource(resource2);
+
+        Task task = new Task();
+        task.addRequiredSkill(Skill.CONSTRUCTION);
+        task.addRequiredSkill(Skill.DEMOLITION);
+
+        Map<Skill, Set<Resource>> eligibleResourcesBySkill = new HashMap<>();
+        eligibleResourcesBySkill.put(Skill.CONSTRUCTION, Set.of(resource1));
+        eligibleResourcesBySkill.put(Skill.DEMOLITION, Set.of(resource2));
+        task.setEligibleResources(eligibleResourcesBySkill);
+
+        boolean isMinimumNumberOfResourcesSatisfied =
+                task.hasEnoughEligibleResources();
+
+        assertTrue(isMinimumNumberOfResourcesSatisfied);
+    }
+
+    @Test
+    void givenTaskAndResources_whenHasEnoughEligibleResources_thenFalse() {
+        Resource resource1 = new Resource();
+        resource1.addSkill(Skill.CONSTRUCTION);
+        Resource resource2= new Resource();
+        resource2.addSkill(Skill.DEMOLITION);
+        ResourceGroup resourceGroup = new ResourceGroup();
+        resourceGroup.addResource(resource1);
+        resourceGroup.addResource(resource2);
+
+        Task task = new Task();
+        task.addRequiredSkill(Skill.CONSTRUCTION);
+        task.addRequiredSkill(Skill.DEMOLITION);
+
+        Map<Skill, Set<Resource>> eligibleResourcesBySkill = new HashMap<>();
+        eligibleResourcesBySkill.put(Skill.CONSTRUCTION, Set.of(resource1));
+        task.setEligibleResources(eligibleResourcesBySkill);
+
+        boolean isMinimumNumberOfResourcesSatisfied =
+                task.hasEnoughEligibleResources();
+        assertFalse(isMinimumNumberOfResourcesSatisfied);
+    }
 }

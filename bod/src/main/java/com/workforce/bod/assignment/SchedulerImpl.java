@@ -48,7 +48,8 @@ public class SchedulerImpl implements Scheduler {
         }
 
         for (Task task : tasks.getTasks()) {
-            Map<Skill, Set<Resource>> eligibleResources = getEligibleResources(task, resourceGroup);
+            Map<Skill, Set<Resource>> eligibleResources =
+                    getEligibleResourcesBySkill(task, resourceGroup);
             if (!eligibleResources.isEmpty()) {
                 // TODO: 12/27/2022 make testable
                 eligibleTaskResources.put(task, eligibleResources);
@@ -59,7 +60,7 @@ public class SchedulerImpl implements Scheduler {
         return eligibleTaskResources;
     }
 
-    private Map<Skill, Set<Resource>> getEligibleResources(Task task, ResourceGroup resourceGroup) {
+    private Map<Skill, Set<Resource>> getEligibleResourcesBySkill(Task task, ResourceGroup resourceGroup) {
         Map<Skill, Set<Resource>> eligibleResources = new HashMap<>();
         Set<Resource> resources = new HashSet<>();
         for (Resource resource : resourceGroup.getResources()) {

@@ -1,5 +1,7 @@
 package com.workforce.bod.assignment;
 
+import com.workforce.bod.ResourceGroup;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;

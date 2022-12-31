@@ -34,4 +34,18 @@ public class Task {
     public void setEligibleResources(Map<Skill, Set<Resource>> eligibleResources) {
         this.eligibleResources = eligibleResources;
     }
+
+    public boolean hasEnoughEligibleResources() {
+        return hasEnoughEligibleResourcesByRquiredSkills();
+    }
+
+    private boolean hasEnoughEligibleResourcesByRquiredSkills() {
+        for (Map.Entry<Skill, Integer> entry : requiredSkills.entrySet()) {
+            if (eligibleResources.get(entry.getKey()) == null
+                    || entry.getValue() > eligibleResources.get(entry.getKey()).size()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
