@@ -91,10 +91,10 @@ public class TaskTest {
         eligibleResourcesBySkill.put(Skill.DEMOLITION, Set.of(resource2));
         task.setEligibleResources(eligibleResourcesBySkill);
 
-        boolean isMinimumNumberOfResourcesSatisfied =
+        boolean hasEnoughEligibleResources =
                 task.hasEnoughEligibleResources();
 
-        assertTrue(isMinimumNumberOfResourcesSatisfied);
+        assertTrue(hasEnoughEligibleResources);
     }
 
     @Test
@@ -115,8 +115,9 @@ public class TaskTest {
         eligibleResourcesBySkill.put(Skill.CONSTRUCTION, Set.of(resource1));
         task.setEligibleResources(eligibleResourcesBySkill);
 
-        boolean isMinimumNumberOfResourcesSatisfied =
+        boolean hasEnoughEligibleResources =
                 task.hasEnoughEligibleResources();
-        assertFalse(isMinimumNumberOfResourcesSatisfied);
+
+        assertFalse(hasEnoughEligibleResources);
     }
 }

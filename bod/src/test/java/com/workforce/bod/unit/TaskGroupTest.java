@@ -1,11 +1,14 @@
 package com.workforce.bod.unit;
 
+import com.workforce.bod.ResourceGroup;
+import com.workforce.bod.assignment.Resource;
 import com.workforce.bod.assignment.Skill;
 import com.workforce.bod.assignment.Task;
 import com.workforce.bod.assignment.TaskGroup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -141,5 +144,63 @@ public class TaskGroupTest {
         boolean isVerified = taskGroup.verifySkills(recalculatedSkills);
 
         assertFalse(isVerified);
+    }
+
+    @Test
+    void givenResourcesAndTasks_whenHasEnoughEligibleResources_thenTrue() {
+        Resource resource1 = createResourceWith(Skill.CONSTRUCTION);
+        Resource resource2 = createResourceWith(Skill.DEMOLITION);
+        ResourceGroup resourceGroup = new ResourceGroup();
+        resourceGroup.addResource(resource1);
+        resourceGroup.addResource(resource2);
+
+        Task task = createTaskWithConstructionAndDemolition();
+        Map<Skill, Set<Resource>> eligibleResourcesBySkill = new HashMap<>();
+        eligibleResourcesBySkill.put(Skill.CONSTRUCTION, Set.of(resource1));
+        eligibleResourcesBySkill.put(Skill.DEMOLITION, Set.of(resource2));
+        task.setEligibleResources(eligibleResourcesBySkill);
+
+        TaskGroup taskGroup = new TaskGroup();
+        taskGroup.addTask(task);
+
+        boolean hasEnoughEligibleResources =
+                taskGroup.hasEnoughEligibleResources(resourceGroup);
+
+        assertTrue(hasEnoughEligibleResources);
+    }
+
+    private static Resource createResourceWith(Skill construction) {
+        Resource resource1 = new Resource();
+        resource1.addSkill(construction);
+        return resource1;
+    }
+
+    private static Task createTaskWithConstructionAndDemolition() {
+        Task task = new Task();
+        task.addRequiredSkill(Skill.CONSTRUCTION);
+        task.addRequiredSkill(Skill.DEMOLITION);
+        return task;
+    }
+
+    @Test
+    void givenResourcesAndTasks_whenHasEnoughEligibleResources_thenFalse() {
+        Resource resource1 = createResourceWith(Skill.CONSTRUCTION);
+        Resource resource2 = createResourceWith(Skill.DEMOLITION);
+        ResourceGroup resourceGroup = new ResourceGroup();
+        resourceGroup.addResource(resource1);
+        resourceGroup.addResource(resource2);
+
+        Task task = createTaskWithConstructionAndDemolition();
+        Map<Skill, Set<Resource>> eligibleResourcesBySkill = new HashMap<>();
+        eligibleResourcesBySkill.put(Skill.CONSTRUCTION, Set.of(resource1));
+        task.setEligibleResources(eligibleResourcesBySkill);
+
+        TaskGroup taskGroup = new TaskGroup();
+        taskGroup.addTask(task);
+
+        boolean hasEnoughEligibleResources =
+                taskGroup.hasEnoughEligibleResources(resourceGroup);
+
+        assertFalse(hasEnoughEligibleResources);
     }
 }

@@ -36,10 +36,10 @@ public class Task {
     }
 
     public boolean hasEnoughEligibleResources() {
-        return hasEnoughEligibleResourcesByRquiredSkills();
+        return hasEnoughEligibleResourcesByRequiredSkills();
     }
 
-    private boolean hasEnoughEligibleResourcesByRquiredSkills() {
+    private boolean hasEnoughEligibleResourcesByRequiredSkills() {
         for (Map.Entry<Skill, Integer> entry : requiredSkills.entrySet()) {
             if (eligibleResources.get(entry.getKey()) == null
                     || entry.getValue() > eligibleResources.get(entry.getKey()).size()) {

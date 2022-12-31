@@ -72,4 +72,13 @@ public class TaskGroup {
     public boolean verifySkills(Map<Skill, Integer> skills2) {
         return skills.equals(skills2);
     }
+
+    public boolean hasEnoughEligibleResources(ResourceGroup resourceGroup) {
+        for (Task task : getTasks()) {
+            if (!task.hasEnoughEligibleResources()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

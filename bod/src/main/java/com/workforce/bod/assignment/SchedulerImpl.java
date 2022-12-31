@@ -41,7 +41,7 @@ public class SchedulerImpl implements Scheduler {
 
     // TODO: 12/27/2022 optimize
     @Override
-    public Map<Task, Map<Skill, Set<Resource>>> getEligibleTaskResources(TaskGroup tasks, ResourceGroup resourceGroup) {
+    public Map<Task, Map<Skill, Set<Resource>>> assignEligibleTaskResources(TaskGroup tasks, ResourceGroup resourceGroup) {
         Map<Task, Map<Skill, Set<Resource>>> eligibleTaskResources = new HashMap<>();
         if (tasks == null || resourceGroup == null) {
             return eligibleTaskResources;
@@ -58,6 +58,11 @@ public class SchedulerImpl implements Scheduler {
             }
         }
         return eligibleTaskResources;
+    }
+
+    @Override
+    public boolean hasEnoughSkilledResourcesForTasks(TaskGroup taskGroup, ResourceGroup resourceGroup) {
+        return taskGroup.hasEnoughEligibleResources(resourceGroup);
     }
 
     private Map<Skill, Set<Resource>> getEligibleResourcesBySkill(Task task, ResourceGroup resourceGroup) {

@@ -12,5 +12,7 @@ public interface Scheduler {
 
     Boolean resourceHasRequiredSillsNumber(List<Task> tasks, List<Resource> resources);
 
-    Map<Task, Map<Skill, Set<Resource>>> getEligibleTaskResources(TaskGroup tasks, ResourceGroup resources);
+    Map<Task, Map<Skill, Set<Resource>>> assignEligibleTaskResources(TaskGroup tasks, ResourceGroup resources);
+
+    boolean hasEnoughSkilledResourcesForTasks(TaskGroup taskGroup, ResourceGroup resourceGroup);
 }
