@@ -14,4 +14,14 @@ public class Assignment {
     private final Resource resource;
     private final LocalDateTime start;
     private final LocalDateTime end;
+
+    public boolean isInTimeInterval(LocalDateTime time) {
+        return (start.isBefore(time) || start.isEqual(time))
+                && (end.isAfter(time) || end.isEqual(time));
+    }
+
+    public boolean isInTimeCollision(Assignment assignment) {
+        return isInTimeInterval(assignment.getStart())
+                || isInTimeInterval(assignment.getEnd());
+    }
 }
