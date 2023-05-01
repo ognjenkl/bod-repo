@@ -1,6 +1,6 @@
-package com.workforce.bod;
+package com.workforce.bod.assignment.board;
 
-import com.workforce.bod.exception.TimeOrderException;
+import com.workforce.bod.assignment.board.exception.TimeOrderException;
 import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
@@ -22,7 +22,9 @@ class WeekDayIntervalTest {
     @Test
     void givenNullForTime_whenCoversNullTime_thenFalse() {
         WeekDayInterval weekDayInterval = new WeekDayInterval(
-                DayOfWeek.MONDAY, null, null);
+                DayOfWeek.MONDAY,
+                LocalTime.of(8, 0),
+                LocalTime.of(16, 0));
         assertFalse(weekDayInterval.covers(null));
     }
 

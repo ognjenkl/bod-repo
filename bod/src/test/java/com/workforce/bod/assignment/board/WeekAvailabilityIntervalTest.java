@@ -1,4 +1,4 @@
-package com.workforce.bod;
+package com.workforce.bod.assignment.board;
 
 import org.junit.jupiter.api.Test;
 

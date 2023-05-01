@@ -1,12 +1,8 @@
-package com.workforce.bod;
+package com.workforce.bod.assignment.board;
 
-import com.workforce.bod.assignment.BoardLane;
-import com.workforce.bod.assignment.Resource;
-import com.workforce.bod.assignment.Skill;
-import com.workforce.bod.assignment.Task;
-import com.workforce.bod.exception.SkillNotRequiredException;
-import com.workforce.bod.exception.TimeCollisionException;
-import com.workforce.bod.exception.WorkingHoursException;
+import com.workforce.bod.assignment.board.exception.SkillNotRequiredException;
+import com.workforce.bod.assignment.board.exception.TimeCollisionException;
+import com.workforce.bod.assignment.board.exception.WorkingHoursException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

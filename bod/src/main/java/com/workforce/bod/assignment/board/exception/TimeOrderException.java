@@ -1,4 +1,4 @@
-package com.workforce.bod.exception;
+package com.workforce.bod.assignment.board.exception;
 
 public class TimeOrderException extends RuntimeException {
 }

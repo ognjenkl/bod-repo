@@ -1,7 +1,7 @@
-package com.workforce.bod.assignment;
+package com.workforce.bod.assignment.board;
 
 
-import com.workforce.bod.exception.TimeOrderException;
+import com.workforce.bod.assignment.board.exception.TimeOrderException;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

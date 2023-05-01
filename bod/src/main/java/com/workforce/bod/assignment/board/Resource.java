@@ -1,6 +1,5 @@
-package com.workforce.bod.assignment;
+package com.workforce.bod.assignment.board;
 
-import com.workforce.bod.AvailabilityCalendar;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

@@ -1,9 +1,9 @@
-package com.workforce.bod.assignment;
+package com.workforce.bod.assignment.board;
 
-import com.workforce.bod.exception.NotEligibleTaskException;
-import com.workforce.bod.exception.SkillNotRequiredException;
-import com.workforce.bod.exception.TimeCollisionException;
-import com.workforce.bod.exception.WorkingHoursException;
+import com.workforce.bod.assignment.board.exception.NotEligibleTaskException;
+import com.workforce.bod.assignment.board.exception.SkillNotRequiredException;
+import com.workforce.bod.assignment.board.exception.TimeCollisionException;
+import com.workforce.bod.assignment.board.exception.WorkingHoursException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

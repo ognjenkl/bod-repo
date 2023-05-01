@@ -1,7 +1,5 @@
-package com.workforce.bod;
+package com.workforce.bod.assignment.board;
 
-import com.workforce.bod.assignment.Resource;
-import com.workforce.bod.assignment.Skill;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

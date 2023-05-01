@@ -1,4 +1,4 @@
-package com.workforce.bod.assignment;
+package com.workforce.bod.assignment.board;
 
 import lombok.Getter;
 

@@ -1,7 +1,6 @@
-package com.workforce.bod;
+package com.workforce.bod.assignment.board;
 
-import com.workforce.bod.assignment.Assignment;
-import com.workforce.bod.exception.TimeOrderException;
+import com.workforce.bod.assignment.board.exception.TimeOrderException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
