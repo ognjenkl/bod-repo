@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ResourceTest {
 
-    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static final String SUNDAY = "2023-04-30 12:00:00";
     public static final String SATURDAY = "2023-04-29 12:00:00";
     public static final String FRIDAY = "2023-04-28 12:00:00";
@@ -26,13 +25,13 @@ public class ResourceTest {
     @BeforeEach
     void setUp() {
         AvailabilityCalendar availabilityCalendar = new AvailabilityCalendar();
-        WeekAvailability weekAvailability = createWeekAvailabilityFileWorkingDays();
+        WeekAvailability weekAvailability = createWeekAvailabilityForWorkingDays();
         availabilityCalendar.addWeekAvailability(weekAvailability);
 
         resource = new Resource(Skill.CONSTRUCTION, availabilityCalendar);
     }
 
-    private static WeekAvailability createWeekAvailabilityFileWorkingDays() {
+    private static WeekAvailability createWeekAvailabilityForWorkingDays() {
         WeekAvailability weekAvailability = new WeekAvailability();
 
         WeekAvailabilityInterval weekAvailabilityInterval = createAvailabilityInterval(
@@ -73,6 +72,26 @@ public class ResourceTest {
         return weekAvailability;
     }
 
+    private static WeekAvailability createWeekAvailabilityForNonWorkingDays() {
+        WeekAvailability weekAvailability = new WeekAvailability();
+
+        WeekAvailabilityInterval weekAvailabilityInterval = createAvailabilityInterval(
+                DayOfWeek.SATURDAY,
+                LocalTime.of(0, 0),
+                LocalTime.of(0, 0),
+                AvailableToWork.NOT_WORK);
+        weekAvailability.addWorkInterval(weekAvailabilityInterval);
+
+        weekAvailabilityInterval = createAvailabilityInterval(
+                DayOfWeek.SUNDAY,
+                LocalTime.of(0, 0),
+                LocalTime.of(0, 0),
+                AvailableToWork.NOT_WORK);
+        weekAvailability.addWorkInterval(weekAvailabilityInterval);
+
+        return weekAvailability;
+    }
+
     private static WeekAvailabilityInterval createAvailabilityInterval(DayOfWeek dayOfWeek,
                                                                        LocalTime start,
                                                                        LocalTime end,
@@ -99,7 +118,54 @@ public class ResourceTest {
         assertTrue(isInWorkingTime);
     }
 
-    private static LocalDateTime getTime(String time) {
-        return LocalDateTime.parse(time, FORMATTER);
+    private LocalDateTime getTime(String dateTime) {
+        return LocalDateTime.parse(
+                dateTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    @Test
+    void givenMultipleDays_whenAreAllDaysProperlyManagedAsNonWorkingDays_thenFalse() {
+        AvailabilityCalendar availabilityCalendar = new AvailabilityCalendar();
+        WeekAvailability weekAvailability = createWeekAvailabilityForWorkingDays();
+        availabilityCalendar.addWeekAvailability(weekAvailability);
+
+        Resource resource = new Resource(Skill.CONSTRUCTION, availabilityCalendar);
+
+        boolean isInWorkingTime = resource.isInWorkTime(getTime(MONDAY))
+                && !resource.isInWorkTime(getTime(TUESDAY))
+                && !resource.isInWorkTime(getTime(WEDNESDAY))
+                && !resource.isInWorkTime(getTime(THURSDAY))
+                && !resource.isInWorkTime(getTime(FRIDAY))
+                && resource.isInWorkTime(getTime(SATURDAY))
+                && resource.isInWorkTime(getTime(SUNDAY));
+
+        assertFalse(isInWorkingTime);
+    }
+
+    @Test
+    void givenSaturdayAndSundayAsNonWorking_whenIsInWorkingSunday_thenFalse() {
+        AvailabilityCalendar availabilityCalendar = new AvailabilityCalendar();
+        WeekAvailability weekAvailability = createWeekAvailabilityForNonWorkingDays();
+        availabilityCalendar.addWeekAvailability(weekAvailability);
+
+        Resource resource = new Resource(Skill.CONSTRUCTION, availabilityCalendar);
+
+        boolean isInWorkingTime = resource.isInWorkTime(getTime(SUNDAY));
+
+        assertFalse(isInWorkingTime);
+    }
+
+    @Test
+    void givenSaturdayAndSundayAsNonWorking_whenIsInWorkingFriday_thenFalse() {
+        AvailabilityCalendar availabilityCalendar = new AvailabilityCalendar();
+        WeekAvailability weekAvailability = createWeekAvailabilityForNonWorkingDays();
+        availabilityCalendar.addWeekAvailability(weekAvailability);
+
+        Resource resource = new Resource(Skill.CONSTRUCTION, availabilityCalendar);
+
+        boolean isInWorkingTime = resource.isInWorkTime(getTime(FRIDAY));
+
+        assertFalse(isInWorkingTime);
     }
 }

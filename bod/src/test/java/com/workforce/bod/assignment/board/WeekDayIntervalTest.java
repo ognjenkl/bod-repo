@@ -12,8 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class WeekDayIntervalTest {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     private static final String MONDAY_NOON = "2023-04-24 12:00:00";
     private static final String MONDAY_SIX = "2023-04-24 06:00:00";
     private static final String MONDAY_EIGHT = "2023-04-24 08:00:00";
@@ -78,6 +76,18 @@ class WeekDayIntervalTest {
     }
 
     private LocalDateTime getTime(String dateTime) {
-        return LocalDateTime.parse(dateTime, FORMATTER);
+        return LocalDateTime.parse(
+                dateTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    @Test
+    void givenMondayFromMidnightToMidnight_whenCoversNoon_thenTrue() {
+        WeekDayInterval weekDayInterval = new WeekDayInterval(
+                DayOfWeek.MONDAY,
+                LocalTime.of(0, 0),
+                LocalTime.of(0, 0));
+
+        assertTrue(weekDayInterval.covers(getTime(MONDAY_NOON)));
     }
 }

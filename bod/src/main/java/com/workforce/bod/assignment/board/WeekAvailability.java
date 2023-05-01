@@ -7,7 +7,7 @@ import java.util.List;
 public class WeekAvailability {
 
     List<WeekAvailabilityInterval> weekAvailabilityIntervals = new ArrayList<>();
-    public boolean canWorkAt(LocalDateTime time) {
+    public boolean isWorkingTime(LocalDateTime time) {
         for(WeekAvailabilityInterval weekAvailabilityInterval : weekAvailabilityIntervals) {
             if (weekAvailabilityInterval.availableToWork(time)) {
                 return true;

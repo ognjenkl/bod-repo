@@ -10,7 +10,7 @@ public class AvailabilityCalendar {
             return false;
         }
 
-        return weekAvailability.canWorkAt(time);
+        return weekAvailability.isWorkingTime(time);
     }
 
     public void addWeekAvailability(WeekAvailability weekAvailability) {

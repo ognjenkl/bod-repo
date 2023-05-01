@@ -28,12 +28,25 @@ public class WeekDayInterval {
             return false;
 
         return dayOfWeek.equals(time.getDayOfWeek())
-                && isBetweenIncludingStart(time);
+                && isBetweenIncludingStartAndExcludingEnd(time);
     }
 
-    private boolean isBetweenIncludingStart(LocalDateTime time) {
-        return (start.isBefore(time.toLocalTime())
-                || start.equals(time.toLocalTime()))
-                && end.isAfter(time.toLocalTime());
+    private boolean isBetweenIncludingStartAndExcludingEnd(LocalDateTime time) {
+        return isAfterStartIncluding(time) && isBeforeEndExcluding(time);
+    }
+
+    private boolean isBeforeEndExcluding(LocalDateTime time) {
+        if (LocalTime.of(0, 0).equals(end)) {
+            LocalTime inclusiveEnd = end.minusNanos(1);
+            return inclusiveEnd.isAfter(time.toLocalTime())
+                    || inclusiveEnd.equals(time.toLocalTime());
+        } else {
+            return end.isAfter(time.toLocalTime());
+        }
+    }
+
+    private boolean isAfterStartIncluding(LocalDateTime time) {
+        return start.isBefore(time.toLocalTime())
+                || start.equals(time.toLocalTime());
     }
 }

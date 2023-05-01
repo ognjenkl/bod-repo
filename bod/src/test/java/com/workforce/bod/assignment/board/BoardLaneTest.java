@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BoardLaneTest {
 
-    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static final String MONDAY_ELEVEN = "2023-04-24 11:00:00";
     public static final String MONDAY_NINE_THIRTY = "2023-04-24 09:30:00";
     public static final String MONDAY_TEN_THIRTY = "2023-04-24 10:30:00";
@@ -64,8 +63,10 @@ public class BoardLaneTest {
         assertTrue(boardLane.numberOfTasks() > 0);
     }
 
-    private static LocalDateTime getTime(String time) {
-        return LocalDateTime.parse(time, FORMATTER);
+    private LocalDateTime getTime(String dateTime) {
+        return LocalDateTime.parse(
+                dateTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     @Test

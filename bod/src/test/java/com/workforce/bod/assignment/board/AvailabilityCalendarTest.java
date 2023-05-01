@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AvailabilityCalendarTest {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String MONDAY_NOON_WORKING_HOUR = "2023-04-24 12:00:00";
     private static final String MONDAY_SIX_NON_WORKING_HOUR = "2023-04-24 06:00:00";
     private static final String TUESDAY_WORKING_HOUR = "2023-04-25 12:00:00";
@@ -61,6 +60,8 @@ class AvailabilityCalendarTest {
     }
 
     private LocalDateTime getTime(String dateTime) {
-        return LocalDateTime.parse(dateTime, FORMATTER);
+        return LocalDateTime.parse(
+                dateTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }

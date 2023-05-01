@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AssignmentTest {
 
-    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     public static final String START = "2020-01-01 10:00:00";
     public static final String END = "2020-01-01 11:00:00";
 
@@ -21,8 +20,8 @@ public class AssignmentTest {
 
     @BeforeEach
     void setUp() {
-        startTime = LocalDateTime.parse(START, FORMATTER);
-        endTime = LocalDateTime.parse(END, FORMATTER);
+        startTime = getTime(START);
+        endTime = getTime(END);
     }
 
     @Test
@@ -35,7 +34,7 @@ public class AssignmentTest {
         assignment = new Assignment(null, null, startTime, endTime);
 
         String timeToCheck = "2020-01-01 10:30:00";
-        boolean isInInterval = assignment.isInTimeInterval(LocalDateTime.parse(timeToCheck, FORMATTER));
+        boolean isInInterval = assignment.isInTimeInterval(getTime(timeToCheck));
 
         assertTrue(isInInterval);
 
@@ -46,7 +45,7 @@ public class AssignmentTest {
         assignment = new Assignment(null, null, startTime, endTime);
 
         String timeToCheck = "2020-01-01 09:30:00";
-        boolean isInInterval = assignment.isInTimeInterval(LocalDateTime.parse(timeToCheck, FORMATTER));
+        boolean isInInterval = assignment.isInTimeInterval(getTime(timeToCheck));
 
         assertFalse(isInInterval);
     }
@@ -56,8 +55,8 @@ public class AssignmentTest {
         assignment = new Assignment(null, null, startTime, endTime);
         String startToCheck = "2020-01-01 10:30:00";
         String endToCheck = "2020-01-01 11:30:00";
-        LocalDateTime start = LocalDateTime.parse(startToCheck, FORMATTER);
-        LocalDateTime end = LocalDateTime.parse(endToCheck, FORMATTER);
+        LocalDateTime start = getTime(startToCheck);
+        LocalDateTime end = getTime(endToCheck);
         Assignment assignmentToCheck = new Assignment(null, null, start, end);
 
         boolean isInInterval = assignment.isInTimeCollision(assignmentToCheck);
@@ -70,8 +69,8 @@ public class AssignmentTest {
         assignment = new Assignment(null, null, startTime, endTime);
         String startToCheck = "2020-01-01 09:30:00";
         String endToCheck = "2020-01-01 10:30:00";
-        LocalDateTime start = LocalDateTime.parse(startToCheck, FORMATTER);
-        LocalDateTime end = LocalDateTime.parse(endToCheck, FORMATTER);
+        LocalDateTime start = getTime(startToCheck);
+        LocalDateTime end = getTime(endToCheck);
         Assignment assignmentToCheck = new Assignment(null, null, start, end);
 
         boolean isInInterval = assignment.isInTimeCollision(assignmentToCheck);
@@ -85,12 +84,18 @@ public class AssignmentTest {
         assignment = new Assignment(null, null, startTime, endTime);
         String startToCheck = "2020-01-01 08:00:00";
         String endToCheck = "2020-01-01 09:00:00";
-        LocalDateTime start = LocalDateTime.parse(startToCheck, FORMATTER);
-        LocalDateTime end = LocalDateTime.parse(endToCheck, FORMATTER);
+        LocalDateTime start = getTime(startToCheck);
+        LocalDateTime end = getTime(endToCheck);
         Assignment assignmentToCheck = new Assignment(null, null, start, end);
 
         boolean isInInterval = assignment.isInTimeCollision(assignmentToCheck);
 
         assertFalse(isInInterval);
+    }
+
+    private LocalDateTime getTime(String dateTime) {
+        return LocalDateTime.parse(
+                dateTime,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 }
