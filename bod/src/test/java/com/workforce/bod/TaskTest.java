@@ -123,7 +123,7 @@ public class TaskTest {
     }
 
     @Test
-    void givenNoSkill_whenGetRequiredSkills_thenReturnEmptyList() {
+    void givenTaskWithNoSkills_whenGetRequiredSkills_thenReturnEmptyList() {
         assertTrue(task.getRequiredSkills().isEmpty());
     }
 

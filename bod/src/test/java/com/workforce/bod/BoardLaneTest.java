@@ -7,7 +7,9 @@ import com.workforce.bod.assignment.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,16 +18,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BoardLaneTest {
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    public static final String WORK_END = "2020-01-01 16:00:00";
-    public static final String WORK_START = "2020-01-01 08:00:00";
+    public static final String MONDAY_ELEVEN = "2023-04-24 11:00:00";
+    public static final String MONDAY_NINE_THIRTY = "2023-04-24 09:30:00";
+    public static final String MONDAY_TEN_THIRTY = "2023-04-24 10:30:00";
+    public static final String MONDAY_TEN = "2023-04-24 10:00:00";
+    public static final String MONDAY_ELEVEN_THIRTY = "2023-04-24 11:30:00";
     BoardLane boardLane;
     Resource resourceForConstruction;
     Task task;
 
     @BeforeEach
     void setUp() {
-        resourceForConstruction = new Resource(Skill.CONSTRUCTION,
-                getTime(WORK_START), getTime(WORK_END));
+        WeekDayInterval weekDayInterval = new WeekDayInterval(
+                DayOfWeek.MONDAY,
+                LocalTime.of(8, 0),
+                LocalTime.of(16, 0));
+        AvailabilityInterval availabilityInterval =
+                new AvailabilityInterval(AvailableToWork.WORK, weekDayInterval);
+        WeekAvailability weekAvailability = new WeekAvailability();
+        weekAvailability.addWorkInterval(availabilityInterval);
+        AvailabilityCalendar availabilityCalendar = new AvailabilityCalendar();
+        availabilityCalendar.addWeekAvailability(weekAvailability);
+        resourceForConstruction = new Resource(Skill.CONSTRUCTION, availabilityCalendar);
         task = new Task();
         boardLane = new BoardLane(resourceForConstruction);
     }
@@ -33,8 +47,8 @@ public class BoardLaneTest {
     @Test
     void givenNotEligibleTask_whenAddAssignment_thenThrowNotEligibleTaskException() {
         task.addRequiredSkill(Skill.DEMOLITION);
-        LocalDateTime startTime = getTime("2020-01-01 10:00:00");
-        LocalDateTime endTime = getTime("2020-01-01 11:00:00");
+        LocalDateTime startTime = getTime(MONDAY_TEN);
+        LocalDateTime endTime = getTime(MONDAY_ELEVEN);
 
         assertThrows(
                 BoardLane.SkillNotRequiredException.class,
@@ -44,8 +58,8 @@ public class BoardLaneTest {
     @Test
     void givenTaskAndTime_whenAddAssignment_thenInBoardLane() {
         task.addRequiredSkill(Skill.CONSTRUCTION);
-        LocalDateTime startTime = getTime("2020-01-01 10:00:00");
-        LocalDateTime endTime = getTime("2020-01-01 11:00:00");
+        LocalDateTime startTime = getTime(MONDAY_TEN);
+        LocalDateTime endTime = getTime(BoardLaneTest.MONDAY_ELEVEN);
         boardLane.addAssignment(task, startTime, endTime);
 
         assertTrue(boardLane.numberOfTasks() > 0);
@@ -78,14 +92,14 @@ public class BoardLaneTest {
     @Test
     void givenNewTask_whenStartOverlapsWithExistingTasks_thenThrowException() {
         task.addRequiredSkill(Skill.CONSTRUCTION);
-        LocalDateTime startTime = getTime("2020-01-01 10:00:00");
-        LocalDateTime endTime = getTime("2020-01-01 11:00:00");
+        LocalDateTime startTime = getTime(MONDAY_TEN);
+        LocalDateTime endTime = getTime(MONDAY_ELEVEN);
         boardLane.addAssignment(task, startTime, endTime);
 
         Task newTask = new Task();
         newTask.addRequiredSkill(Skill.CONSTRUCTION);
-        LocalDateTime newStartTime = getTime("2020-01-01 10:30:00");
-        LocalDateTime newEndTime = getTime("2020-01-01 11:30:00");
+        LocalDateTime newStartTime = getTime(MONDAY_TEN_THIRTY);
+        LocalDateTime newEndTime = getTime(MONDAY_ELEVEN_THIRTY);
 
         assertThrows(
                 BoardLane.TimeCollisionException.class,
@@ -93,16 +107,16 @@ public class BoardLaneTest {
     }
 
     @Test
-    void givenNewTask_whenEndOverlapsWithExistingTasks_thenThrowException() {
+    void givenTwoTasks_whenEndTimeOverlapsWithExistingTasks_thenThrowException() {
         task.addRequiredSkill(Skill.CONSTRUCTION);
-        LocalDateTime startTime = getTime("2020-01-01 10:00:00");
-        LocalDateTime endTime = getTime("2020-01-01 11:00:00");
+        LocalDateTime startTime = getTime(MONDAY_TEN);
+        LocalDateTime endTime = getTime(MONDAY_ELEVEN);
         boardLane.addAssignment(task, startTime, endTime);
 
         Task newTask = new Task();
         newTask.addRequiredSkill(Skill.CONSTRUCTION);
-        LocalDateTime newStartTime = getTime("2020-01-01 09:30:00");
-        LocalDateTime newEndTime = getTime("2020-01-01 10:30:00");
+        LocalDateTime newStartTime = getTime(MONDAY_NINE_THIRTY);
+        LocalDateTime newEndTime = getTime(MONDAY_TEN_THIRTY);
 
         assertThrows(
                 BoardLane.TimeCollisionException.class,

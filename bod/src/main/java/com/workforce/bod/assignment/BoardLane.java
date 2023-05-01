@@ -14,14 +14,11 @@ public class BoardLane {
     }
 
     private boolean isEligible(Assignment assignment) {
-//    private boolean isEligible(Task task,
-//                               LocalDateTime start,
-//                               LocalDateTime end) {
         boolean isSkillRequired = isResourceSkillAmongRequired(assignment.getTask());
-        boolean isStartInWorkingHours = isInWorkingHours(assignment);
+        boolean isInWorkingHours = isInWorkingHours(assignment);
         boolean isInCollisionWithOtherTasks = isInCollisionWithOtherTasks(assignment);
         return isSkillRequired
-                && isStartInWorkingHours
+                && isInWorkingHours
                 && !isInCollisionWithOtherTasks;
     }
 
@@ -44,11 +41,8 @@ public class BoardLane {
         return false;
     }
 
-    private boolean isInWorkingHours(LocalDateTime start) {
-        return (resource.getWorkStart().isBefore(start)
-                || resource.getWorkStart().isEqual(start))
-                && (resource.getWorkEnd().isAfter(start)
-                || resource.getWorkEnd().isEqual(start));
+    private boolean isInWorkingHours(LocalDateTime localDateTime) {
+        return resource.getAvailabilityCalendar().isAvailableToWork(localDateTime);
     }
 
     private boolean isResourceSkillAmongRequired(Task task) {
