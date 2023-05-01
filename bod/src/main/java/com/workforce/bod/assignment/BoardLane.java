@@ -1,5 +1,10 @@
 package com.workforce.bod.assignment;
 
+import com.workforce.bod.exception.NotEligibleTaskException;
+import com.workforce.bod.exception.SkillNotRequiredException;
+import com.workforce.bod.exception.TimeCollisionException;
+import com.workforce.bod.exception.WorkingHoursException;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,17 +70,5 @@ public class BoardLane {
         } else {
             throw new NotEligibleTaskException();
         }
-    }
-
-    public static class NotEligibleTaskException extends RuntimeException {
-    }
-
-    public static class TimeCollisionException extends RuntimeException {
-    }
-
-    public static class WorkingHoursException extends RuntimeException {
-    }
-
-    public static class SkillNotRequiredException extends RuntimeException {
     }
 }

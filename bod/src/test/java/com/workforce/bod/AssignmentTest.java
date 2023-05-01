@@ -1,6 +1,7 @@
 package com.workforce.bod;
 
 import com.workforce.bod.assignment.Assignment;
+import com.workforce.bod.exception.TimeOrderException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,7 @@ public class AssignmentTest {
 
     @Test
     void givenAssignment_whenStartIsAfterEndTime_throwException() {
-        assertThrows(Assignment.TimeOrderException.class, () -> new Assignment(null, null, endTime, startTime));
+        assertThrows(TimeOrderException.class, () -> new Assignment(null, null, endTime, startTime));
     }
 
     @Test

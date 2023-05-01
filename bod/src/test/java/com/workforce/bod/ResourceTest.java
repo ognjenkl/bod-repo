@@ -37,50 +37,50 @@ public class ResourceTest {
     private static WeekAvailability createWeekAvailabilityFileWorkingDays() {
         WeekAvailability weekAvailability = new WeekAvailability();
 
-        AvailabilityInterval availabilityInterval = createAvailabilityInterval(
+        WeekAvailabilityInterval weekAvailabilityInterval = createAvailabilityInterval(
                 DayOfWeek.MONDAY,
                 LocalTime.of(8, 0),
                 LocalTime.of(16, 0),
                 AvailableToWork.WORK);
-        weekAvailability.addWorkInterval(availabilityInterval);
+        weekAvailability.addWorkInterval(weekAvailabilityInterval);
 
-        availabilityInterval = createAvailabilityInterval(
+        weekAvailabilityInterval = createAvailabilityInterval(
                 DayOfWeek.TUESDAY,
                 LocalTime.of(8, 0),
                 LocalTime.of(16, 0),
                 AvailableToWork.WORK);
-        weekAvailability.addWorkInterval(availabilityInterval);
+        weekAvailability.addWorkInterval(weekAvailabilityInterval);
 
-        availabilityInterval = createAvailabilityInterval(
+        weekAvailabilityInterval = createAvailabilityInterval(
                 DayOfWeek.WEDNESDAY,
                 LocalTime.of(8, 0),
                 LocalTime.of(16, 0),
                 AvailableToWork.WORK);
-        weekAvailability.addWorkInterval(availabilityInterval);
+        weekAvailability.addWorkInterval(weekAvailabilityInterval);
 
-        availabilityInterval = createAvailabilityInterval(
+        weekAvailabilityInterval = createAvailabilityInterval(
                 DayOfWeek.THURSDAY,
                 LocalTime.of(8, 0),
                 LocalTime.of(16, 0),
                 AvailableToWork.WORK);
-        weekAvailability.addWorkInterval(availabilityInterval);
+        weekAvailability.addWorkInterval(weekAvailabilityInterval);
 
-        availabilityInterval = createAvailabilityInterval(
+        weekAvailabilityInterval = createAvailabilityInterval(
                 DayOfWeek.FRIDAY,
                 LocalTime.of(8, 0),
                 LocalTime.of(16, 0),
                 AvailableToWork.WORK);
-        weekAvailability.addWorkInterval(availabilityInterval);
+        weekAvailability.addWorkInterval(weekAvailabilityInterval);
 
         return weekAvailability;
     }
 
-    private static AvailabilityInterval createAvailabilityInterval(DayOfWeek dayOfWeek,
-                                                                   LocalTime start,
-                                                                   LocalTime end,
-                                                                   AvailableToWork availableToWork) {
+    private static WeekAvailabilityInterval createAvailabilityInterval(DayOfWeek dayOfWeek,
+                                                                       LocalTime start,
+                                                                       LocalTime end,
+                                                                       AvailableToWork availableToWork) {
         WeekDayInterval weekDayInterval = new WeekDayInterval(dayOfWeek, start, end);
-        return new AvailabilityInterval(availableToWork, weekDayInterval);
+        return new WeekAvailabilityInterval(availableToWork, weekDayInterval);
     }
 
     @Test

@@ -4,6 +4,9 @@ import com.workforce.bod.assignment.BoardLane;
 import com.workforce.bod.assignment.Resource;
 import com.workforce.bod.assignment.Skill;
 import com.workforce.bod.assignment.Task;
+import com.workforce.bod.exception.SkillNotRequiredException;
+import com.workforce.bod.exception.TimeCollisionException;
+import com.workforce.bod.exception.WorkingHoursException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,10 +36,10 @@ public class BoardLaneTest {
                 DayOfWeek.MONDAY,
                 LocalTime.of(8, 0),
                 LocalTime.of(16, 0));
-        AvailabilityInterval availabilityInterval =
-                new AvailabilityInterval(AvailableToWork.WORK, weekDayInterval);
+        WeekAvailabilityInterval weekAvailabilityInterval =
+                new WeekAvailabilityInterval(AvailableToWork.WORK, weekDayInterval);
         WeekAvailability weekAvailability = new WeekAvailability();
-        weekAvailability.addWorkInterval(availabilityInterval);
+        weekAvailability.addWorkInterval(weekAvailabilityInterval);
         AvailabilityCalendar availabilityCalendar = new AvailabilityCalendar();
         availabilityCalendar.addWeekAvailability(weekAvailability);
         resourceForConstruction = new Resource(Skill.CONSTRUCTION, availabilityCalendar);
@@ -51,7 +54,7 @@ public class BoardLaneTest {
         LocalDateTime endTime = getTime(MONDAY_ELEVEN);
 
         assertThrows(
-                BoardLane.SkillNotRequiredException.class,
+                SkillNotRequiredException.class,
                 () -> boardLane.addAssignment(task, startTime, endTime));
     }
 
@@ -75,7 +78,7 @@ public class BoardLaneTest {
         LocalDateTime startTime = getTime("2020-01-01 07:00:00");
         LocalDateTime endTime = getTime("2020-01-01 09:00:00");
         assertThrows(
-                BoardLane.WorkingHoursException.class,
+                WorkingHoursException.class,
                 () -> boardLane.addAssignment(task, startTime, endTime));
     }
 
@@ -85,7 +88,7 @@ public class BoardLaneTest {
         LocalDateTime startTime = getTime("2020-01-01 15:00:00");
         LocalDateTime endTime = getTime("2020-01-01 17:00:00");
         assertThrows(
-                BoardLane.WorkingHoursException.class,
+                WorkingHoursException.class,
                 () -> boardLane.addAssignment(task, startTime, endTime));
     }
 
@@ -102,7 +105,7 @@ public class BoardLaneTest {
         LocalDateTime newEndTime = getTime(MONDAY_ELEVEN_THIRTY);
 
         assertThrows(
-                BoardLane.TimeCollisionException.class,
+                TimeCollisionException.class,
                 () -> boardLane.addAssignment(newTask, newStartTime, newEndTime));
     }
 
@@ -119,7 +122,7 @@ public class BoardLaneTest {
         LocalDateTime newEndTime = getTime(MONDAY_TEN_THIRTY);
 
         assertThrows(
-                BoardLane.TimeCollisionException.class,
+                TimeCollisionException.class,
                 () -> boardLane.addAssignment(newTask, newStartTime, newEndTime));
     }
 }

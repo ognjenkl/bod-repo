@@ -6,17 +6,17 @@ import java.util.List;
 
 public class WeekAvailability {
 
-    List<AvailabilityInterval> availabilityIntervals = new ArrayList<>();
+    List<WeekAvailabilityInterval> weekAvailabilityIntervals = new ArrayList<>();
     public boolean canWorkAt(LocalDateTime time) {
-        for(AvailabilityInterval availabilityInterval : availabilityIntervals) {
-            if (availabilityInterval.availableToWork(time)) {
+        for(WeekAvailabilityInterval weekAvailabilityInterval : weekAvailabilityIntervals) {
+            if (weekAvailabilityInterval.availableToWork(time)) {
                 return true;
             }
         }
         return false;
     }
 
-    public void addWorkInterval(AvailabilityInterval availabilityInterval) {
-        availabilityIntervals.add(availabilityInterval);
+    public void addWorkInterval(WeekAvailabilityInterval weekAvailabilityInterval) {
+        weekAvailabilityIntervals.add(weekAvailabilityInterval);
     }
 }

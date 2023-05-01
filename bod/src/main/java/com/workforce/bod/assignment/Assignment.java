@@ -1,6 +1,7 @@
 package com.workforce.bod.assignment;
 
 
+import com.workforce.bod.exception.TimeOrderException;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -33,8 +34,5 @@ public class Assignment {
     public boolean isInTimeCollision(Assignment assignment) {
         return isInTimeInterval(assignment.getStart())
                 || isInTimeInterval(assignment.getEnd());
-    }
-
-    public static class TimeOrderException extends RuntimeException {
     }
 }
