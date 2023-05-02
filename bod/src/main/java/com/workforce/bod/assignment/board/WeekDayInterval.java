@@ -1,11 +1,15 @@
 package com.workforce.bod.assignment.board;
 
 import com.workforce.bod.assignment.board.exception.TimeOrderException;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@Getter
+@ToString
 public class WeekDayInterval {
     private final DayOfWeek dayOfWeek;
     private final LocalTime start;
@@ -18,7 +22,7 @@ public class WeekDayInterval {
         this.start = start;
         this.end = end;
 
-        if (end.isBefore(start)) {
+        if (end.isBefore(start) && !LocalTime.of(0, 0 ).equals(end)) {
             throw new TimeOrderException();
         }
     }

@@ -1,6 +1,5 @@
 package com.workforce.bod.assignment.board;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
@@ -8,9 +7,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class WeekAvailabilityTest {
 
     private static final String MONDAY_NOON = "2023-04-24 12:00:00";
+    private static final String SUNDAY_NOON = "2023-04-23 12:00:00";
 
     @Test
     void givenNull_whenIsWorkingTime_thenFalse() {
@@ -20,7 +23,7 @@ class WeekAvailabilityTest {
 
         boolean isWorkingTime = weekAvailability.isWorkingTime(null);
 
-        Assertions.assertFalse(isWorkingTime);
+        assertFalse(isWorkingTime);
     }
 
     @Test
@@ -32,7 +35,7 @@ class WeekAvailabilityTest {
         boolean isWorkingTime = weekAvailability.isWorkingTime(
                 getTime(MONDAY_NOON));
 
-        Assertions.assertTrue(isWorkingTime);
+        assertTrue(isWorkingTime);
     }
 
     private LocalDateTime getTime(String dateTime) {
@@ -50,7 +53,7 @@ class WeekAvailabilityTest {
         boolean isWorkingTime = weekAvailability.isWorkingTime(
                 getTime(MONDAY_NOON).minusHours(6));
 
-        Assertions.assertFalse(isWorkingTime);
+        assertFalse(isWorkingTime);
     }
 
     private WeekAvailabilityInterval createMondayWorking8to16() {
@@ -84,14 +87,43 @@ class WeekAvailabilityTest {
         boolean isWorkingTime = weekAvailability.isWorkingTime(
                 getTime(MONDAY_NOON).minusDays(1));
 
-        Assertions.assertFalse(isWorkingTime);
+        assertFalse(isWorkingTime);
     }
 
     private WeekAvailabilityInterval createSundayNotWorkingAllDayLong() {
-        return  createWeekAvailabilityInterval(
+        return createWeekAvailabilityInterval(
                 DayOfWeek.SUNDAY,
                 LocalTime.of(0, 0),
                 LocalTime.of(0, 0),
                 AvailableToWork.NOT_WORK);
+    }
+
+    @Test
+    void givenTwoDaysFridayToMondayAndTwoLocalTimesAsWorking_whenAddInterval_thenSundayNoonIsWorking() {
+        WeekAvailability weekAvailability = new WeekAvailability();
+
+        weekAvailability.addInterval(
+                DayOfWeek.FRIDAY, LocalTime.of(16, 0),
+                DayOfWeek.MONDAY, LocalTime.of(8, 0),
+                AvailableToWork.WORK);
+
+        boolean isWorkingTime =
+                weekAvailability.isWorkingTime(getTime(SUNDAY_NOON));
+        assertTrue(isWorkingTime);
+    }
+
+    @Test
+    void givenOneDayMondayAndTwoLocalTimesAsWorking_whenAddInterval_thenFridayNoonIsWorking() {
+        WeekAvailability weekAvailability = new WeekAvailability();
+
+        weekAvailability.addInterval(
+                DayOfWeek.MONDAY,
+                LocalTime.of(8, 0),
+                LocalTime.of(16, 0),
+                AvailableToWork.WORK);
+
+        boolean isWorkingTime =
+                weekAvailability.isWorkingTime(getTime(MONDAY_NOON));
+        assertTrue(isWorkingTime);
     }
 }
