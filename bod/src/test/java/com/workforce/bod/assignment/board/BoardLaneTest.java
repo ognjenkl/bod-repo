@@ -38,7 +38,7 @@ public class BoardLaneTest {
         AvailabilityCalendar availabilityCalendar = new AvailabilityCalendar();
         availabilityCalendar.addWeekAvailability(weekAvailability);
         resourceForConstruction = new Resource(Skill.CONSTRUCTION, availabilityCalendar);
-        task = new Task();
+        task = new Task(null);
         boardLane = new BoardLane(resourceForConstruction);
     }
 
@@ -96,7 +96,7 @@ public class BoardLaneTest {
         LocalDateTime endTime = getTime(MONDAY_ELEVEN);
         boardLane.addAssignment(task, startTime, endTime);
 
-        Task newTask = new Task();
+        Task newTask = new Task(null);
         newTask.addRequiredSkill(Skill.CONSTRUCTION);
         LocalDateTime newStartTime = getTime(MONDAY_TEN_THIRTY);
         LocalDateTime newEndTime = getTime(MONDAY_ELEVEN_THIRTY);
@@ -113,7 +113,7 @@ public class BoardLaneTest {
         LocalDateTime endTime = getTime(MONDAY_ELEVEN);
         boardLane.addAssignment(task, startTime, endTime);
 
-        Task newTask = new Task();
+        Task newTask = new Task(null);
         newTask.addRequiredSkill(Skill.CONSTRUCTION);
         LocalDateTime newStartTime = getTime(MONDAY_NINE_THIRTY);
         LocalDateTime newEndTime = getTime(MONDAY_TEN_THIRTY);

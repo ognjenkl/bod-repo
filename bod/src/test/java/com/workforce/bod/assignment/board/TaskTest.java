@@ -3,15 +3,21 @@ package com.workforce.bod.assignment.board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TaskTest {
 
     Task task;
+    TaskStatusRepository taskStatusRepository;
 
     @BeforeEach
     void setUp() {
-        task = new Task();
+        taskStatusRepository = new StubTaskStatusRepositoryImpl();
+        TaskStatus status = taskStatusRepository.getDefaultStatus();
+        task = new Task(status);
     }
 
 //    @Test
@@ -125,4 +131,38 @@ public class TaskTest {
         assertTrue(task.getRequiredSkills().isEmpty());
     }
 
+    @Test
+    void givenTask_whenGetStatus_thenReturnDefaultStatus() {
+        assertEquals(TaskStatus.Status.OPEN.name(), task.getStatus().getCurrent());
+    }
+
+    @Test
+    void givenTaskOpen_whenTransitionToScheduled_thenChangeStatusToScheduled() {
+        TaskStatus transitionedStatus = taskStatusRepository.getByStatus(
+                TaskStatus.Status.SCHEDULED.name());
+        task.transitionTo(transitionedStatus);
+
+        assertEquals(TaskStatus.Status.SCHEDULED.name(), task.getStatus().getCurrent());
+    }
+
+    private static class StubTaskStatusRepositoryImpl implements TaskStatusRepository {
+        @Override
+        public TaskStatus getDefaultStatus() {
+            return new TaskStatus(
+                    TaskStatus.Status.OPEN.name(),
+                    List.of(
+                            TaskStatus.Status.SCHEDULED.name(),
+                            TaskStatus.Status.CANCELLED.name()));
+        }
+
+        @Override
+        public TaskStatus getByStatus(String status) {
+            return new TaskStatus(
+                    status,
+                    List.of(
+                            TaskStatus.Status.OPEN.name(),
+                            TaskStatus.Status.DISPATCHED.name(),
+                            TaskStatus.Status.CANCELLED.name()));
+        }
+    }
 }
